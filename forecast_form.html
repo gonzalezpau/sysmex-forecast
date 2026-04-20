@@ -774,8 +774,8 @@
             const calendarMonth = now.getMonth() + 1; // 1-12
             const calendarYear = now.getFullYear();
             
-            // Fiscal year calculation: April 2026 - March 2027 = FY 2027
-            const fiscalYear = calendarMonth >= 4 ? calendarYear + 1 : calendarYear;
+            // Fiscal year calculation: April 2026 - March 2027 = FY 2026
+            const fiscalYear = calendarMonth >= 4 ? calendarYear : calendarYear - 1;
             
             // Fiscal month: April = 1, March = 12
             const fiscalMonth = calendarMonth >= 4 ? calendarMonth - 3 : calendarMonth + 9;
