@@ -771,9 +771,14 @@
         // ============================================
         function calculateFiscalInfo() {
             const now = new Date();
-            const calendarMonth = now.getMonth() + 1;
+            const calendarMonth = now.getMonth() + 1; // 1-12
+            const calendarYear = now.getFullYear();
+            
+            // Fiscal year calculation: April 2026 - March 2027 = FY 2027
+            const fiscalYear = calendarMonth >= 4 ? calendarYear + 1 : calendarYear;
+            
+            // Fiscal month: April = 1, March = 12
             const fiscalMonth = calendarMonth >= 4 ? calendarMonth - 3 : calendarMonth + 9;
-            const fiscalYear = calendarMonth >= 4 ? now.getFullYear() + 1 : now.getFullYear();
             
             if (fiscalMonth >= 1 && fiscalMonth <= 3) {
                 quarters = [
@@ -898,12 +903,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>${t.comments} ${quarter.name} ${t.optional}</label>
-                        <textarea name="${quarter.name}_Comments" 
-                                  placeholder="${t.comments}..."></textarea>
-                    </div>
                 `;
                 
                 container.appendChild(section);
@@ -960,7 +959,7 @@
                         LaborCost: parseFloat(document.querySelector(`[name="${quarter.name}_LaborCost"]`).value),
                         GeneralExpense: parseFloat(document.querySelector(`[name="${quarter.name}_GeneralExpense"]`).value),
                         Depreciation: parseFloat(document.querySelector(`[name="${quarter.name}_Depreciation"]`).value),
-                        Comments: document.querySelector(`[name="${quarter.name}_Comments"]`).value || ''
+                        Comments: ''
                     };
                     data.Quarters.push(quarterData);
                 });
