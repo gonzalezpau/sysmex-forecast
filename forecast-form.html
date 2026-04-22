@@ -400,6 +400,204 @@
             margin-right: 8px;
         }
 
+        /* Advanced Admin Panel */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .admin-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .admin-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0, 61, 165, 0.05);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            color: #005bac;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .admin-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .admin-tab {
+            border: 1px solid #d1d5db;
+            background: #f9fafb;
+            color: #1f2937;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .admin-tab:hover {
+            border-color: #005bac;
+            color: #005bac;
+        }
+
+        .admin-tab.active {
+            background: #005bac;
+            color: white;
+            border-color: #005bac;
+        }
+
+        .admin-section {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: #005bac;
+            margin-bottom: 14px;
+            font-size: 18px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .setting-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px;
+            background: #f9fafb;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .setting-help {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .toggle {
+            width: 48px;
+            height: 28px;
+            border-radius: 999px;
+            border: none;
+            background: #cbd5e1;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            transition: transform 0.2s;
+        }
+
+        .toggle.enabled {
+            background: #005bac;
+        }
+
+        .toggle.enabled::after {
+            transform: translateX(20px);
+        }
+
+        .history-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .history-toolbar input {
+            max-width: 260px;
+        }
+
+        .history-table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #e6f4fb;
+            color: #005bac;
+        }
+
+        .small-text {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .json-viewer {
+            width: 100%;
+            min-height: 130px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            padding: 10px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 12px;
+            background: #f9fafb;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -549,48 +747,140 @@
 
             <!-- Screen 6: Admin Panel -->
             <div id="screenAdmin" class="screen">
-                <h2 class="welcome-title">Admin Panel</h2>
-                <button class="btn btn-secondary" onclick="goToScreen(1)" style="margin-bottom: 20px;">
-                    ← Back to Form
-                </button>
+                <div class="admin-header">
+                    <div>
+                        <h2 class="welcome-title" style="text-align: left; margin-bottom: 6px;">Admin Panel</h2>
+                        <div class="admin-subtitle">Management, security controls and submission history</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="goToScreen(1)">
+                        ← Back to Form
+                    </button>
+                </div>
 
-                <!-- Regions Management -->
-                <h3 style="color: #005bac; margin: 30px 0 20px;">Regions & Countries Management</h3>
-                
-                <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 15px;">Add New Region</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px;">
-                        <input type="text" id="newRegionName" placeholder="Region Name (e.g., Iberia)">
-                        <input type="text" id="newRegionCode" placeholder="Region Code (e.g., IBR)">
-                        <button class="btn btn-primary" onclick="addRegion()">Add Region</button>
+                <div class="admin-dashboard">
+                    <div class="metric-card">
+                        <div class="metric-label">Authorized Emails</div>
+                        <div class="metric-value" id="metricEmails">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Regions</div>
+                        <div class="metric-value" id="metricRegions">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Countries</div>
+                        <div class="metric-value" id="metricCountries">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Submissions</div>
+                        <div class="metric-value" id="metricSubmissions">0</div>
                     </div>
                 </div>
 
-                <div id="regionsContainer"></div>
+                <div class="admin-tabs">
+                    <button type="button" class="admin-tab active" onclick="switchAdminTab('settings')" id="tab_settings">Access Control</button>
+                    <button type="button" class="admin-tab" onclick="switchAdminTab('regions')" id="tab_regions">Regions & Countries</button>
+                    <button type="button" class="admin-tab" onclick="switchAdminTab('emails')" id="tab_emails">Authorized Emails</button>
+                    <button type="button" class="admin-tab" onclick="switchAdminTab('history')" id="tab_history">Submission History</button>
+                </div>
 
-                <!-- Authorized Emails Management -->
-                <h3 style="color: #005bac; margin: 30px 0 20px;">Authorized Emails</h3>
-                
-                <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 15px;">Add Authorized Email</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px;">
-                        <input type="email" id="newEmail" placeholder="Email address">
-                        <input type="text" id="newEmailName" placeholder="Name (optional)">
-                        <button class="btn btn-primary" onclick="addEmail()">Add</button>
+                <div class="admin-section active" id="section_settings">
+                    <h3 class="section-title">Access Control Settings</h3>
+                    <div class="settings-grid">
+                        <div class="setting-card">
+                            <div class="setting-row">
+                                <strong>Strict Email Whitelist</strong>
+                                <button type="button" id="strictAccessToggle" class="toggle" onclick="toggleStrictAccess()" aria-label="Toggle strict email whitelist"></button>
+                            </div>
+                            <div class="setting-help">When enabled, only emails configured in Authorized Emails can access the form.</div>
+                        </div>
+                        <div class="setting-card">
+                            <div class="setting-row">
+                                <strong>Denied Login Attempts</strong>
+                                <span class="badge" id="deniedAttemptsBadge">0</span>
+                            </div>
+                            <div class="setting-help">Tracks blocked email attempts for audit and troubleshooting.</div>
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 18px 0 10px;">Recent denied attempts</h4>
+                    <div class="history-table-wrap">
+                        <table class="admin-table" style="margin: 0;">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Email</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deniedAttemptsTable"></tbody>
+                        </table>
                     </div>
                 </div>
 
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Name</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="emailsTable">
-                    </tbody>
-                </table>
+                <div class="admin-section" id="section_regions">
+                    <h3 class="section-title">Regions & Countries Management</h3>
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 15px;">Add New Region</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" id="newRegionName" placeholder="Region Name (e.g., Iberia)">
+                            <input type="text" id="newRegionCode" placeholder="Region Code (e.g., IBR)">
+                            <button class="btn btn-primary" onclick="addRegion()">Add Region</button>
+                        </div>
+                    </div>
+                    <div id="regionsContainer"></div>
+                </div>
+
+                <div class="admin-section" id="section_emails">
+                    <h3 class="section-title">Authorized Emails</h3>
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 15px;">Add Authorized Email</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px;">
+                            <input type="email" id="newEmail" placeholder="Email address">
+                            <input type="text" id="newEmailName" placeholder="Name (optional)">
+                            <button class="btn btn-primary" onclick="addEmail()">Add</button>
+                        </div>
+                    </div>
+                    <div class="history-table-wrap">
+                        <table class="admin-table" style="margin: 0;">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="emailsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-section" id="section_history">
+                    <h3 class="section-title">Submission History</h3>
+                    <div class="history-toolbar">
+                        <input type="text" id="historySearchInput" placeholder="Search by email, country or FY" oninput="loadHistoryTable()">
+                        <button class="btn btn-secondary" type="button" onclick="exportSubmissionHistory()">Export JSON</button>
+                        <button class="btn btn-danger" type="button" onclick="clearSubmissionHistory()">Clear History</button>
+                    </div>
+                    <div class="small-text" style="margin-bottom: 12px;">Tip: use the search box to filter records instantly.</div>
+                    <div class="history-table-wrap">
+                        <table class="admin-table" style="margin: 0;">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Email</th>
+                                    <th>Country</th>
+                                    <th>FY</th>
+                                    <th>Month</th>
+                                    <th>Quarters</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTable"></tbody>
+                        </table>
+                    </div>
+                    <h4 style="margin: 16px 0 8px;">Record Details</h4>
+                    <div id="historyDetails" class="json-viewer">Select "View" on a record to inspect full data.</div>
+                </div>
             </div>
         </div>
 
@@ -679,6 +969,53 @@
             localStorage.setItem('sysmex_emails', JSON.stringify(emails));
         }
 
+        function getAdminSettings() {
+            const stored = localStorage.getItem('sysmex_admin_settings');
+            const defaults = { strictAccess: true };
+            return stored ? { ...defaults, ...JSON.parse(stored) } : defaults;
+        }
+
+        function saveAdminSettings(settings) {
+            localStorage.setItem('sysmex_admin_settings', JSON.stringify(settings));
+        }
+
+        function getSubmissionHistory() {
+            const stored = localStorage.getItem('sysmex_submission_history');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveSubmissionHistory(history) {
+            localStorage.setItem('sysmex_submission_history', JSON.stringify(history));
+        }
+
+        function addSubmissionHistory(record) {
+            const history = getSubmissionHistory();
+            history.unshift({
+                ...record,
+                HistoryId: record.HistoryId || `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+            });
+            saveSubmissionHistory(history);
+        }
+
+        function getDeniedAttempts() {
+            const stored = localStorage.getItem('sysmex_denied_attempts');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveDeniedAttempts(attempts) {
+            localStorage.setItem('sysmex_denied_attempts', JSON.stringify(attempts));
+        }
+
+        function logDeniedAttempt(email, reason) {
+            const attempts = getDeniedAttempts();
+            attempts.unshift({
+                date: new Date().toISOString(),
+                email,
+                reason
+            });
+            saveDeniedAttempts(attempts.slice(0, 100));
+        }
+
         // ============================================
         // FUNCIONS DE NAVEGACIÓ
         // ============================================
@@ -707,22 +1044,23 @@
             
             // Validate against authorized emails
             const authorizedEmails = getAuthorizedEmails();
-            
-            // If list is empty, all emails are allowed
-            if (authorizedEmails.length === 0) {
-                userEmail = email;
-                loadRegionGrid();
-                goToScreen(2);
-                return;
-            }
-            
-            // If list has emails, check if this email is in the list (case-insensitive)
-            const isAuthorized = authorizedEmails.some(e => e.email.toLowerCase() === email);
-            
-            if (!isAuthorized) {
-                emailInput.focus();
-                showAlert('error', 'This email is not authorized. Please contact your administrator.');
-                return;
+            const settings = getAdminSettings();
+
+            if (settings.strictAccess) {
+                if (authorizedEmails.length === 0) {
+                    logDeniedAttempt(email, 'No authorized email configured');
+                    emailInput.focus();
+                    showAlert('error', 'Access is restricted. No authorized emails are configured yet. Contact admin.');
+                    return;
+                }
+
+                const isAuthorized = authorizedEmails.some(e => e.email.toLowerCase() === email);
+                if (!isAuthorized) {
+                    logDeniedAttempt(email, 'Email not in whitelist');
+                    emailInput.focus();
+                    showAlert('error', 'This email is not authorized. Please contact your administrator.');
+                    return;
+                }
             }
             
             userEmail = email;
@@ -790,8 +1128,147 @@
         }
 
         function loadAdminPanel() {
+            loadAdminSettings();
+            loadAdminMetrics();
+            loadDeniedAttemptsTable();
             loadRegionsAdmin();
             loadEmailsTable();
+            loadHistoryTable();
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(section => section.classList.remove('active'));
+
+            document.getElementById(`tab_${tabName}`).classList.add('active');
+            document.getElementById(`section_${tabName}`).classList.add('active');
+        }
+
+        function loadAdminSettings() {
+            const settings = getAdminSettings();
+            const toggle = document.getElementById('strictAccessToggle');
+            if (!toggle) return;
+
+            toggle.classList.toggle('enabled', settings.strictAccess);
+            toggle.setAttribute('aria-pressed', settings.strictAccess ? 'true' : 'false');
+        }
+
+        function toggleStrictAccess() {
+            const settings = getAdminSettings();
+            settings.strictAccess = !settings.strictAccess;
+            saveAdminSettings(settings);
+            loadAdminSettings();
+            showAlert('success', `Strict email whitelist ${settings.strictAccess ? 'enabled' : 'disabled'}.`);
+        }
+
+        function loadAdminMetrics() {
+            const regions = getRegions();
+            const emails = getAuthorizedEmails();
+            const history = getSubmissionHistory();
+            const countriesCount = regions.reduce((acc, region) => acc + region.countries.length, 0);
+
+            document.getElementById('metricEmails').textContent = emails.length;
+            document.getElementById('metricRegions').textContent = regions.length;
+            document.getElementById('metricCountries').textContent = countriesCount;
+            document.getElementById('metricSubmissions').textContent = history.length;
+        }
+
+        function loadDeniedAttemptsTable() {
+            const tbody = document.getElementById('deniedAttemptsTable');
+            const attempts = getDeniedAttempts();
+            document.getElementById('deniedAttemptsBadge').textContent = attempts.length;
+
+            if (attempts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #6b7280;">No denied attempts recorded.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = attempts.slice(0, 10).map(attempt => `
+                <tr>
+                    <td>${new Date(attempt.date).toLocaleString('en-GB')}</td>
+                    <td>${attempt.email}</td>
+                    <td>${attempt.reason}</td>
+                </tr>
+            `).join('');
+        }
+
+        function loadHistoryTable() {
+            const history = getSubmissionHistory();
+            const tbody = document.getElementById('historyTable');
+            const searchInput = document.getElementById('historySearchInput');
+            const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+            const filtered = history.filter(item => {
+                if (!query) return true;
+                return (
+                    (item.Email || '').toLowerCase().includes(query) ||
+                    (item.Country || '').toLowerCase().includes(query) ||
+                    (item.FiscalYear || '').toLowerCase().includes(query)
+                );
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #6b7280;">No submissions found.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((item, index) => {
+                const safeDate = item.SubmissionDate ? new Date(item.SubmissionDate).toLocaleString('en-GB') : '-';
+                const quarterCount = Array.isArray(item.Quarters) ? item.Quarters.length : 0;
+                const id = item.HistoryId || `legacy_${index}`;
+
+                return `
+                    <tr>
+                        <td>${safeDate}</td>
+                        <td>${item.Email || '-'}</td>
+                        <td>${item.Country || '-'}</td>
+                        <td>${item.FiscalYear || '-'}</td>
+                        <td>${item.FiscalMonth || '-'}</td>
+                        <td><span class="badge">${quarterCount}</span></td>
+                        <td><button class="btn btn-secondary action-btn" onclick="viewHistoryRecord('${id}')">View</button></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function viewHistoryRecord(recordId) {
+            const history = getSubmissionHistory();
+            const record = history.find(item => item.HistoryId === recordId) || history[parseInt(recordId.replace('legacy_', ''), 10)];
+            const viewer = document.getElementById('historyDetails');
+            if (!record) {
+                viewer.textContent = 'Record not found.';
+                return;
+            }
+
+            viewer.textContent = JSON.stringify(record, null, 2);
+        }
+
+        function exportSubmissionHistory() {
+            const history = getSubmissionHistory();
+            if (history.length === 0) {
+                showAlert('error', 'No submission history to export.');
+                return;
+            }
+
+            const blob = new Blob([JSON.stringify(history, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = `sysmex-submission-history-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+            URL.revokeObjectURL(url);
+            showAlert('success', 'Submission history exported.');
+        }
+
+        function clearSubmissionHistory() {
+            if (!confirm('Are you sure you want to delete all submission history?')) return;
+            saveSubmissionHistory([]);
+            document.getElementById('historyDetails').textContent = 'Select "View" on a record to inspect full data.';
+            loadHistoryTable();
+            loadAdminMetrics();
+            showAlert('success', 'Submission history cleared.');
         }
 
         function loadRegionsAdmin() {
@@ -908,6 +1385,7 @@
             
             document.getElementById('newRegionName').value = '';
             document.getElementById('newRegionCode').value = '';
+            loadAdminMetrics();
             
             showAlert('success', 'Region added successfully!');
         }
@@ -919,6 +1397,7 @@
             regions.splice(index, 1);
             saveRegions(regions);
             loadRegionsAdmin();
+            loadAdminMetrics();
             showAlert('success', 'Region deleted successfully!');
         }
 
@@ -940,6 +1419,7 @@
             document.getElementById(`newCountryCode_${regionIndex}`).value = '';
             document.getElementById(`newCountryName_${regionIndex}`).value = '';
             document.getElementById(`newCountryCompanyId_${regionIndex}`).value = '';
+            loadAdminMetrics();
             
             showAlert('success', 'Country added successfully!');
         }
@@ -951,6 +1431,7 @@
             regions[regionIndex].countries.splice(countryIndex, 1);
             saveRegions(regions);
             loadRegionsAdmin();
+            loadAdminMetrics();
             showAlert('success', 'Country deleted successfully!');
         }
 
@@ -998,6 +1479,7 @@
             emails.push({ email, name });
             saveAuthorizedEmails(emails);
             loadEmailsTable();
+            loadAdminMetrics();
             
             document.getElementById('newEmail').value = '';
             document.getElementById('newEmailName').value = '';
@@ -1012,6 +1494,7 @@
             emails.splice(index, 1);
             saveAuthorizedEmails(emails);
             loadEmailsTable();
+            loadAdminMetrics();
             showAlert('success', 'Email removed successfully!');
         }
 
@@ -1085,56 +1568,56 @@
                     
                     <div class="fields-row">
                         <div class="form-group">
-                            <label>External Sales <span class="required">*</span></label>
+                            <label>External Sales (YTD) <span class="required">*</span></label>
                             <div class="input-group">
-                                <input type="number" step="0.01" min="0" required
-                                       name="${quarter.name}_ExternalSales" placeholder="1250.50">
-                                <span class="input-suffix">k€</span>
+                                <input type="text" inputmode="decimal" required
+                                       name="${quarter.name}_ExternalSales" placeholder="1250,50">
+                                <span class="input-suffix">€</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Internal Sales <span class="required">*</span></label>
+                            <label>Internal Sales (YTD) <span class="required">*</span></label>
                             <div class="input-group">
-                                <input type="number" step="0.01" min="0" required
-                                       name="${quarter.name}_InternalSales" placeholder="450.25">
-                                <span class="input-suffix">k€</span>
+                                <input type="text" inputmode="decimal" required
+                                       name="${quarter.name}_InternalSales" placeholder="450,25">
+                                <span class="input-suffix">€</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Cost of Sales <span class="required">*</span></label>
+                            <label>Gross Profit (YTD) <span class="required">*</span></label>
                             <div class="input-group">
-                                <input type="number" step="0.01" min="0" required
-                                       name="${quarter.name}_CostOfSales" placeholder="850.00">
-                                <span class="input-suffix">k€</span>
+                                <input type="text" inputmode="decimal" required
+                                       name="${quarter.name}_GrossProfit" placeholder="850,00">
+                                <span class="input-suffix">€</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Labor Cost <span class="required">*</span></label>
+                            <label>Labor Cost (YTD) <span class="required">*</span></label>
                             <div class="input-group">
-                                <input type="number" step="0.01" min="0" required
-                                       name="${quarter.name}_LaborCost" placeholder="320.75">
-                                <span class="input-suffix">k€</span>
+                                <input type="text" inputmode="decimal" required
+                                       name="${quarter.name}_LaborCost" placeholder="320,75">
+                                <span class="input-suffix">€</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>General Expense <span class="required">*</span></label>
+                            <label>General Expense (YTD) <span class="required">*</span></label>
                             <div class="input-group">
-                                <input type="number" step="0.01" min="0" required
-                                       name="${quarter.name}_GeneralExpense" placeholder="180.00">
-                                <span class="input-suffix">k€</span>
+                                <input type="text" inputmode="decimal" required
+                                       name="${quarter.name}_GeneralExpense" placeholder="180,00">
+                                <span class="input-suffix">€</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Depreciation <span class="required">*</span></label>
+                            <label>Depreciation (YTD) <span class="required">*</span></label>
                             <div class="input-group">
-                                <input type="number" step="0.01" min="0" required
-                                       name="${quarter.name}_Depreciation" placeholder="95.50">
-                                <span class="input-suffix">k€</span>
+                                <input type="text" inputmode="decimal" required
+                                       name="${quarter.name}_Depreciation" placeholder="95,50">
+                                <span class="input-suffix">€</span>
                             </div>
                         </div>
                     </div>
@@ -1163,6 +1646,21 @@
         // ============================================
         // ENVIAMENT FORMULARI
         // ============================================
+        function parseLocalizedNumber(rawValue) {
+            const value = rawValue.trim().replace(/\s/g, '');
+            if (!value) return NaN;
+
+            // Accepts: 1234,56 | 1234.56 | 1.234,56
+            let normalized = value;
+            if (normalized.includes(',') && normalized.includes('.')) {
+                normalized = normalized.replace(/\./g, '').replace(',', '.');
+            } else if (normalized.includes(',')) {
+                normalized = normalized.replace(',', '.');
+            }
+
+            return Number(normalized);
+        }
+
         document.getElementById('forecastForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1185,15 +1683,26 @@
                 };
                 
                 quarters.forEach(quarter => {
+                    const externalSales = parseLocalizedNumber(document.querySelector(`[name="${quarter.name}_ExternalSales"]`).value);
+                    const internalSales = parseLocalizedNumber(document.querySelector(`[name="${quarter.name}_InternalSales"]`).value);
+                    const grossProfit = parseLocalizedNumber(document.querySelector(`[name="${quarter.name}_GrossProfit"]`).value);
+                    const laborCost = parseLocalizedNumber(document.querySelector(`[name="${quarter.name}_LaborCost"]`).value);
+                    const generalExpense = parseLocalizedNumber(document.querySelector(`[name="${quarter.name}_GeneralExpense"]`).value);
+                    const depreciation = parseLocalizedNumber(document.querySelector(`[name="${quarter.name}_Depreciation"]`).value);
+
+                    if ([externalSales, internalSales, grossProfit, laborCost, generalExpense, depreciation].some(v => Number.isNaN(v))) {
+                        throw new Error(`Please enter valid numeric values for ${quarter.name}.`);
+                    }
+
                     const quarterData = {
                         Quarter: quarter.name,
                         QuarterType: '',
-                        ExternalSales: parseFloat(document.querySelector(`[name="${quarter.name}_ExternalSales"]`).value),
-                        InternalSales: parseFloat(document.querySelector(`[name="${quarter.name}_InternalSales"]`).value),
-                        CostOfSales: parseFloat(document.querySelector(`[name="${quarter.name}_CostOfSales"]`).value),
-                        LaborCost: parseFloat(document.querySelector(`[name="${quarter.name}_LaborCost"]`).value),
-                        GeneralExpense: parseFloat(document.querySelector(`[name="${quarter.name}_GeneralExpense"]`).value),
-                        Depreciation: parseFloat(document.querySelector(`[name="${quarter.name}_Depreciation"]`).value),
+                        ExternalSales: externalSales,
+                        InternalSales: internalSales,
+                        GrossProfit: grossProfit,
+                        LaborCost: laborCost,
+                        GeneralExpense: generalExpense,
+                        Depreciation: depreciation,
                         Comments: ''
                     };
                     data.Quarters.push(quarterData);
@@ -1212,6 +1721,10 @@
                 if (!response.ok) {
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
                 }
+
+                addSubmissionHistory(data);
+                loadAdminMetrics();
+                loadHistoryTable();
                 
                 showAlert('success', `Data sent successfully for ${selectedCountry}! You will receive a confirmation email.`);
                 
