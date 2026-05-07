@@ -1180,26 +1180,7 @@
                 return;
             }
             
-            // Validate against authorized emails
-            const authorizedEmails = getAuthorizedEmails();
-            const settings = getAdminSettings();
-
-            if (settings.strictAccess) {
-                if (authorizedEmails.length === 0) {
-                    logDeniedAttempt(email, 'No authorized email configured');
-                    emailInput.focus();
-                    showAlert('error', 'Access is restricted. No authorized emails are configured yet. Contact admin.');
-                    return;
-                }
-
-                const isAuthorized = authorizedEmails.some(e => e.email.toLowerCase() === email);
-                if (!isAuthorized) {
-                    logDeniedAttempt(email, 'Email not in whitelist');
-                    emailInput.focus();
-                    showAlert('error', 'This email is not authorized. Please contact your administrator.');
-                    return;
-                }
-            }
+            // Temporary open access: accept any valid email while whitelist is disabled.
             
             userEmail = email;
             loadRegionGrid();
