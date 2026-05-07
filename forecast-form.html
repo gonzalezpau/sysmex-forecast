@@ -801,10 +801,10 @@
                     <div class="settings-grid">
                         <div class="setting-card">
                             <div class="setting-row">
-                                <strong>Strict Email Whitelist</strong>
-                                <button type="button" id="strictAccessToggle" class="toggle" onclick="toggleStrictAccess()" aria-label="Toggle strict email whitelist"></button>
+                                <strong>Open Access</strong>
+                                <button type="button" id="strictAccessToggle" class="toggle" onclick="toggleStrictAccess()" aria-label="Toggle open access"></button>
                             </div>
-                            <div class="setting-help">When enabled, only emails configured in Authorized Emails can access the form.</div>
+                            <div class="setting-help">When enabled, any valid email can access the form. The email list is informational only.</div>
                         </div>
                         <div class="setting-card">
                             <div class="setting-row">
@@ -1107,7 +1107,7 @@
 
         function getAdminSettings() {
             const stored = localStorage.getItem('sysmex_admin_settings');
-            const defaults = { strictAccess: true };
+            const defaults = { strictAccess: false };
             return stored ? { ...defaults, ...JSON.parse(stored) } : defaults;
         }
 
@@ -1180,7 +1180,7 @@
                 return;
             }
             
-            // Temporary open access: accept any valid email while whitelist is disabled.
+            // Temporary open access: accept any valid email.
             
             userEmail = email;
             loadRegionGrid();
@@ -1268,17 +1268,17 @@
             const toggle = document.getElementById('strictAccessToggle');
             if (!toggle) return;
 
-            toggle.classList.toggle('enabled', settings.strictAccess);
-            toggle.setAttribute('aria-pressed', settings.strictAccess ? 'true' : 'false');
+            toggle.classList.add('enabled');
+            toggle.setAttribute('aria-pressed', 'true');
+            toggle.disabled = true;
+            toggle.title = 'Open access is always enabled';
         }
 
         function toggleStrictAccess() {
-            const settings = getAdminSettings();
-            settings.strictAccess = !settings.strictAccess;
-            saveAdminSettings(settings);
             loadAdminSettings();
-            showAlert('success', `Strict email whitelist ${settings.strictAccess ? 'enabled' : 'disabled'}.`);
+            showAlert('success', 'Open access is always enabled.');
         }
+            // Temporary open access: accept any valid email.
 
         function loadAdminMetrics() {
             const regions = getRegions();
