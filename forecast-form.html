@@ -253,10 +253,23 @@
             grid-template-columns: repeat(6, 1fr);
             gap: 12px;
             margin-bottom: 18px;
+            align-items: start;
         }
 
         .input-group {
             position: relative;
+        }
+
+        .fields-row .form-group {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .fields-row .form-group label {
+            min-height: 38px;
+            display: flex;
+            align-items: flex-end;
         }
 
         .input-suffix {
@@ -964,13 +977,132 @@
             localStorage.setItem('sysmex_countries', JSON.stringify(countries));
         }
 
-        function getAuthorizedEmails() {
-            const stored = localStorage.getItem('sysmex_emails');
-            return stored ? JSON.parse(stored) : [];
+        function normalizeAuthorizedEmailEntry(entry) {
+            if (!entry) return null;
+
+            if (typeof entry === 'string') {
+                const email = entry.trim().toLowerCase();
+                return email ? { email, name: '' } : null;
+            }
+
+            const email = (entry.email || '').trim().toLowerCase();
+            if (!email) return null;
+
+            return {
+                email,
+                name: (entry.name || '').trim()
+            };
         }
 
-        function saveAuthorizedEmails(emails) {
-            localStorage.setItem('sysmex_emails', JSON.stringify(emails));
+        function normalizeAuthorizedEmails(emails) {
+            if (!Array.isArray(emails)) return [];
+
+            const seen = new Set();
+            const normalized = [];
+
+            emails.forEach(entry => {
+                const item = normalizeAuthorizedEmailEntry(entry);
+                if (!item) return;
+
+                const key = item.email.toLowerCase();
+                if (seen.has(key)) return;
+
+                seen.add(key);
+                normalized.push(item);
+            });
+
+            return normalized;
+        }
+
+        function getAuthorizedEmails() {
+            const stored = localStorage.getItem('sysmex_emails');
+            return normalizeAuthorizedEmails(stored ? JSON.parse(stored) : []);
+        }
+
+        async function syncAuthorizedEmailsToRemote(emails) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'authorized_emails_sync',
+                        configType: 'authorized_emails',
+                        authorizedEmails: emails
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.warn('Remote authorized emails sync failed:', error);
+            }
+        }
+
+        async function fetchAuthorizedEmailsFromRemote() {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'authorized_emails_load',
+                        configType: 'authorized_emails'
+                    })
+                });
+
+                if (!response.ok) {
+                    return null;
+                }
+
+                const contentType = response.headers.get('content-type') || '';
+                let payload = null;
+
+                if (contentType.includes('application/json')) {
+                    payload = await response.json();
+                } else {
+                    const text = await response.text();
+                    try {
+                        payload = JSON.parse(text);
+                    } catch (parseError) {
+                        return null;
+                    }
+                }
+
+                const remoteEmails = Array.isArray(payload)
+                    ? payload
+                    : Array.isArray(payload?.authorizedEmails)
+                        ? payload.authorizedEmails
+                        : Array.isArray(payload?.emails)
+                            ? payload.emails
+                            : Array.isArray(payload?.data?.authorizedEmails)
+                                ? payload.data.authorizedEmails
+                                : Array.isArray(payload?.data?.emails)
+                                    ? payload.data.emails
+                                    : null;
+
+                return remoteEmails ? normalizeAuthorizedEmails(remoteEmails) : null;
+            } catch (error) {
+                console.warn('Remote authorized emails load failed:', error);
+                return null;
+            }
+        }
+
+        async function hydrateAuthorizedEmails() {
+            const remoteEmails = await fetchAuthorizedEmailsFromRemote();
+            if (remoteEmails !== null) {
+                saveAuthorizedEmails(remoteEmails, false);
+            }
+        }
+
+        function saveAuthorizedEmails(emails, syncRemote = true) {
+            const normalized = normalizeAuthorizedEmails(emails);
+            localStorage.setItem('sysmex_emails', JSON.stringify(normalized));
+
+            if (syncRemote) {
+                void syncAuthorizedEmailsToRemote(normalized);
+            }
+
+            return normalized;
         }
 
         function getAdminSettings() {
@@ -1029,7 +1161,9 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function validateEmail() {
+        async function validateEmail() {
+            await authorizedEmailsReadyPromise;
+
             const emailInput = document.getElementById('userEmail');
             const email = emailInput.value.trim().toLowerCase();
             
@@ -1615,6 +1749,8 @@
             }
         }
 
+        let authorizedEmailsReadyPromise = Promise.resolve();
+
         // ============================================
         // CÀLCUL FISCAL
         // ============================================
@@ -1860,15 +1996,16 @@
         });
 
         // Initialization on load
-        (function initPage() {
+        (async function initPage() {
             try {
                 updateFiscalInfo();
+                authorizedEmailsReadyPromise = hydrateAuthorizedEmails();
+                await authorizedEmailsReadyPromise;
+                loadSharedEmailsFromURLOnInit();
                 loadRegionsAdmin();
                 loadEmailsTable();
                 loadAdminMetrics();
                 loadHistoryTable();
-                // If URL contains shared emails, offer to import/merge
-                loadSharedEmailsFromURLOnInit();
             } catch (e) {
                 console.warn('Init warning:', e);
             }
