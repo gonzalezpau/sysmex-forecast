@@ -839,6 +839,10 @@
                             <input type="text" id="newEmailName" placeholder="Name (optional)">
                             <button class="btn btn-primary" onclick="addEmail()">Add</button>
                         </div>
+                        <div style="margin-top:12px; display:flex; gap:8px;">
+                            <button class="btn btn-secondary" type="button" onclick="generateShareLink()">Share Authorized Emails</button>
+                            <button class="btn btn-secondary" type="button" onclick="promptImportFromLink()">Import From Link</button>
+                        </div>
                     </div>
                     <div class="history-table-wrap">
                         <table class="admin-table" style="margin: 0;">
@@ -1499,6 +1503,119 @@
         }
 
         // ============================================
+        // SHARE / IMPORT AUTHORIZED EMAILS (URL-BASED)
+        // ============================================
+        function safeEncode(obj) {
+            return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+        }
+
+        function safeDecode(str) {
+            return JSON.parse(decodeURIComponent(escape(atob(str))));
+        }
+
+        function generateShareLink() {
+            const emails = getAuthorizedEmails();
+            if (!emails || emails.length === 0) {
+                showAlert('error', 'No authorized emails to share.');
+                return;
+            }
+
+            try {
+                const payload = safeEncode(emails);
+                const url = new URL(window.location.href);
+                url.searchParams.set('shared_emails', payload);
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url.toString()).then(() => {
+                        showAlert('success', 'Shareable link copied to clipboard.');
+                    }).catch(() => {
+                        prompt('Copy this link:', url.toString());
+                    });
+                } else {
+                    prompt('Copy this link:', url.toString());
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert('error', 'Failed to generate share link.');
+            }
+        }
+
+        function promptImportFromLink() {
+            const provided = prompt('Paste a link containing authorized emails (shared_emails param), or leave empty to import from current URL:');
+            const source = provided && provided.trim() ? provided.trim() : window.location.href;
+
+            try {
+                const u = new URL(source);
+                const val = u.searchParams.get('shared_emails');
+                if (!val) {
+                    showAlert('error', 'No shared_emails parameter found in provided link.');
+                    return;
+                }
+                importEmailsFromPayload(val);
+            } catch (e) {
+                console.error(e);
+                showAlert('error', 'Invalid URL.');
+            }
+        }
+
+        function importEmailsFromPayload(payload) {
+            try {
+                const decoded = safeDecode(payload);
+                if (!Array.isArray(decoded)) throw new Error('Invalid payload');
+
+                const replace = confirm('Se importarán los correos autorizados del enlace. OK=Reemplazar, Cancel=Combinar');
+                if (replace) {
+                    saveAuthorizedEmails(decoded);
+                } else {
+                    const current = getAuthorizedEmails();
+                    const merged = [...current];
+                    decoded.forEach(e => {
+                        const emailLower = (e.email || '').toLowerCase();
+                        if (!merged.some(m => (m.email || '').toLowerCase() === emailLower)) merged.push(e);
+                    });
+                    saveAuthorizedEmails(merged);
+                }
+
+                loadEmailsTable();
+                loadAdminMetrics();
+                showAlert('success', 'Authorized emails loaded from link.');
+            } catch (err) {
+                console.error(err);
+                showAlert('error', 'Failed to import shared emails.');
+            }
+        }
+
+        function loadSharedEmailsFromURLOnInit() {
+            const params = new URLSearchParams(window.location.search);
+            const p = params.get('shared_emails');
+            if (!p) return;
+
+            try {
+                const decoded = safeDecode(p);
+
+                const replace = confirm('Se han detectado correos autorizados en el enlace. ¿Deseas reemplazar la lista local con la compartida? (Aceptar=Reemplazar, Cancelar=Combinar)');
+                if (replace) {
+                    saveAuthorizedEmails(decoded);
+                } else {
+                    const current = getAuthorizedEmails();
+                    const merged = [...current];
+                    decoded.forEach(e => {
+                        const emailLower = (e.email || '').toLowerCase();
+                        if (!merged.some(m => (m.email || '').toLowerCase() === emailLower)) merged.push(e);
+                    });
+                    saveAuthorizedEmails(merged);
+                }
+
+                loadEmailsTable();
+                loadAdminMetrics();
+                showAlert('success', 'Authorized emails loaded from link.');
+            } catch (e) {
+                console.error(e);
+                showAlert('error', 'Invalid shared emails in URL.');
+            }
+        }
+
+        // ============================================
         // CÀLCUL FISCAL
         // ============================================
         function calculateFiscalInfo() {
@@ -1741,6 +1858,21 @@
                 submitBtnText.innerHTML = originalText;
             }
         });
+
+        // Initialization on load
+        (function initPage() {
+            try {
+                updateFiscalInfo();
+                loadRegionsAdmin();
+                loadEmailsTable();
+                loadAdminMetrics();
+                loadHistoryTable();
+                // If URL contains shared emails, offer to import/merge
+                loadSharedEmailsFromURLOnInit();
+            } catch (e) {
+                console.warn('Init warning:', e);
+            }
+        })();
     </script>
 </body>
 </html>
