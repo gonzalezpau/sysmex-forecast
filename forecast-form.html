@@ -1796,58 +1796,57 @@
                 
                 section.innerHTML = `
                     <div class="quarter-header">
-                        <h3>${quarter.name} FY ${fiscalInfo.fiscalYear}</h3>
-                        <div class="quarter-period">${quarter.period}</div>
+                        <h3>${quarter.name} FY ${fiscalInfo.fiscalYear} — YTD</h3>
                     </div>
-                    
+
                     <div class="fields-row">
                         <div class="form-group">
-                            <label>External Sales (YTD) <span class="required">*</span></label>
+                            <label>External Sales <span class="required">*</span></label>
                             <div class="input-group">
                                 <input type="text" inputmode="decimal" required
                                        name="${quarter.name}_ExternalSales" placeholder="1250,50">
                                 <span class="input-suffix">€</span>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
-                            <label>Internal Sales (YTD) <span class="required">*</span></label>
+                            <label>Internal Sales <span class="required">*</span></label>
                             <div class="input-group">
                                 <input type="text" inputmode="decimal" required
                                        name="${quarter.name}_InternalSales" placeholder="450,25">
                                 <span class="input-suffix">€</span>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
-                            <label>Gross Profit (YTD) <span class="required">*</span></label>
+                            <label>Gross Profit <span class="required">*</span></label>
                             <div class="input-group">
                                 <input type="text" inputmode="decimal" required
                                        name="${quarter.name}_GrossProfit" placeholder="850,00">
                                 <span class="input-suffix">€</span>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
-                            <label>Labor Cost (YTD) <span class="required">*</span></label>
+                            <label>Labor Cost <span class="required">*</span></label>
                             <div class="input-group">
                                 <input type="text" inputmode="decimal" required
                                        name="${quarter.name}_LaborCost" placeholder="320,75">
                                 <span class="input-suffix">€</span>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
-                            <label>General Expense (YTD) <span class="required">*</span></label>
+                            <label>General Expense <span class="required">*</span></label>
                             <div class="input-group">
                                 <input type="text" inputmode="decimal" required
                                        name="${quarter.name}_GeneralExpense" placeholder="180,00">
                                 <span class="input-suffix">€</span>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
-                            <label>Depreciation (YTD) <span class="required">*</span></label>
+                            <label>Depreciation <span class="required">*</span></label>
                             <div class="input-group">
                                 <input type="text" inputmode="decimal" required
                                        name="${quarter.name}_Depreciation" placeholder="95,50">
